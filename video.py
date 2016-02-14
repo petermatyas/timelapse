@@ -54,7 +54,7 @@ f2 = open(workingFolder + '/list2.txt','r')
 
 i = 0
 for line2 in f2:
-  f = open('list.txt','r')
+  f = open(workingFolder + '/list.txt','r')
   line2 = line2.rstrip('\n')
   print "copy files: " + line2
   year2 = line2[0:4]
@@ -88,8 +88,8 @@ print("kepek szama: %d" %i)
 if (mergeVideo == "yes"):
   print "merge videos"
   os.system("ls | grep mp4 > videolist0.txt")
-  f3 = open('videolist.txt','w')  
-  f4 = open('videolist0.txt','r') 
+  f3 = open(workingFolder + '/videolist.txt','w')  
+  f4 = open(workingFolder + '/videolist0.txt','r') 
   for line in f4:
     if (line[9:11] == framerate) and (int(line[0:8]) >= int(startDay)):
       f3.write("file " + line)
