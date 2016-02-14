@@ -5,12 +5,12 @@ import time
 import getpass
 
 #=== Config ==============================================================================================
-framerate  = "24"
-startDay   = "20160213"
+framerate  = "15"
+startDay   = "20160120"
 stopDay    = "20190210"
 mergeVideo = "yes"		# yes|no	default: yes
 resolution = "1280x720"
-textSize   = "120"
+textSize   = "120"		# default: 120
 
 pathToPictures = "/media/" + getpass.getuser() + "/KA/camera"	# external hard drive contain the pictures
 #workingFolder = os.getcwd()
@@ -67,17 +67,18 @@ for line2 in f2:
     month = line[4:6]
     day = line[6:8]       
     if ((year == year2) and (month == month2) and (day == day2)):
-      os.system("cp " + pathToPictures + "/" + line + " " + workingFolder)      
     # copy to working folder
+      os.system("cp " + pathToPictures + "/" + line + " " + workingFolder)      
     # label
       text = year + "/" + month + "/" + day                                     
     # format of label, resize and crop picture:
-      os.system("convert " + line + " -resize 1280x960 -gravity South -crop 1280x720+0+0 -pointsize " + textSize + " -fill white -gravity southeast -annotate +150+100 " + text + " -append " + workingFolder + "/0" + line)	
+      os.system("convert " + workingFolder + "/" + line + " -resize 1280x960 -gravity South -crop 1280x720+0+0 -pointsize " + textSize + " -fill white -gravity southeast -annotate +150+100 " + text + " -append " + workingFolder + "/0" + line)	
     # remove the picture without label:
       os.system("rm " + workingFolder + "/" + line)	
   print "convert files: " + line2
-  os.system("ffmpeg -r " + framerate + " -i *.png -s " + "1280x960" + " -vcodec libx264 " + workingFolder + "/" + line2 + "_" + framerate + "fps.mp4")					# convert video
-  os.system("rm *.png")
+    # convert video
+  os.system("ffmpeg -r " + framerate + " -i " + workingFolder + "/%*.png -s " + "1280x960" + " -vcodec libx264 " + workingFolder + "/" + line2 + "_" + framerate + "fps.mp4")					# convert video
+  os.system("rm " + workingFolder + "/*.png")
   f.close()
 
 f2.close()
@@ -87,19 +88,20 @@ print("kepek szama: %d" %i)
 #=== Merge videos =====================================
 if (mergeVideo == "yes"):
   print "merge videos"
-  os.system("ls | grep mp4 > videolist0.txt")
+  os.system("ls " + workingFolder + " | grep mp4 > /videolist0.txt")
   f3 = open(workingFolder + '/videolist.txt','w')  
-  f4 = open(workingFolder + '/videolist0.txt','r') 
+  f4 = open('/videolist0.txt','r') 
   for line in f4:
     if (line[9:11] == framerate) and (int(line[0:8]) >= int(startDay)):
       f3.write("file " + line)
   f4.close()
   f3.close()
-  os.system("ffmpeg -f concat -i videolist.txt -codec copy output_" + framerate + ".mp4")
+  os.system("ffmpeg -f concat -i " + workingFolder + "/videolist.txt -codec copy output_" + framerate + ".mp4")
 
 
 #== Clean =============================================
 os.system("rm " + workingFolder + "/list.txt")
 os.system("rm " + workingFolder + "/list2.txt")
-os.system("rm " + workingFolder + "/videolist0.txt")
+os.system("rm /videolist0.txt")
+os.system("rm " + workingFolder + "/videolist.txt")
 log.close()
