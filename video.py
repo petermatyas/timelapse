@@ -14,7 +14,7 @@ textSize   = "120"
 
 pathToPictures = "/media/" + getpass.getuser() + "/KA/camera"	# external hard drive contain the pictures
 #workingFolder = os.getcwd()
-workingFolder = "/home/arpad/timelapse"
+workingFolder = "/home/peti/timelapseWork"
 #=== Config end ==========================================================================================
 
 
