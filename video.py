@@ -50,7 +50,7 @@ log.write("number of pictures: " + str(pic) + "\n")
 log.write("number of days:     " + str(day) + "\n")
 
 #=== Select pictures and convert video ================
-f2 = open(workingFolder + 'list2.txt','r')
+f2 = open(workingFolder + '/list2.txt','r')
 
 i = 0
 for line2 in f2:
