@@ -6,10 +6,8 @@ import getpass
 
 #=== Config ==============================================================================================
 framerate  = "15"
-startDay   = "20160120"
-stopDay    = "20190210"
-mergeVideo = "yes"		# yes|no	default: yes
-resolution = "1280x720"
+startDay   = "20160128"
+stopDay    = "20160128"
 textSize   = "120"		# default: 120
 
 pathToPictures = "/media/" + getpass.getuser() + "/KA/camera"	# external hard drive contain the pictures
@@ -30,7 +28,7 @@ for line in f3:
   line = line.rstrip('\n')
   if line[0]=="2":
     f.write(line + "\n")
-    if (lineArchive != line[0:8]) and (int(line[0:8]) >= int(startDay) and (int(line[0:8]) < stopDay) and not(os.path.isfile(workingFolder + "/" + line[0:8] + "_" + framerate + "fps.mp4"))):
+    if ((lineArchive != line[0:8]) and (int(line[0:8]) >= int(startDay)) and (int(line[0:8]) <= int(stopDay)) and not(os.path.isfile(workingFolder + "/" + line[0:8] + "_" + framerate + "fps.mp4"))):
       f2.write(line[0:8] + "\n") 
       lineArchive = line[0:8]   
 
@@ -64,29 +62,27 @@ for line2 in f2:
     # labelling
       os.system("convert " + workingFolder + "/" + line + " -pointsize " + textSize + " -fill white -gravity southeast -annotate +100+100 " + text + " " + workingFolder + "/0" + line)
     # resize and crop picture:
-      os.system("convert " + workingFolder + "/0" + line + " -resize 1280x960 -gravity south -crop 1280x720+0+0 " + workingFolder + "/" + line)
-    # remove the temp pictures:
-      #os.system("rm " + workingFolder + "/" + line)	
+      os.system("convert " + workingFolder + "/0" + line + " -gravity south -crop 2592x1458+0+0 " + workingFolder + "/" + line)
+    # remove the temp pictures:	
       os.system("rm " + workingFolder + "/0" + line)
   # convert video
-  os.system("ffmpeg -r " + framerate + " -i " + workingFolder + "/%*.png " + " -vcodec libx264 " + workingFolder + "/" + line2 + "_" + framerate + "fps.mp4")
+  os.system("ffmpeg -r " + framerate + " -i " + workingFolder + "/%*.png " + " -s hd1080 -vcodec libx264 " + workingFolder + "/" + line2 + "_" + framerate + "fps.mp4")
   # clear pictures
   os.system("rm " + workingFolder + "/*.png")
   f.close()
 f2.close()
 
 #=== Merge videos =====================================
-if (mergeVideo == "yes"):
-  print "merge videos"
-  os.system("ls " + workingFolder + " | grep mp4 > videolist0.txt")
-  f3 = open(workingFolder + '/videolist.txt','w')  
-  f4 = open('videolist0.txt','r') 
-  for line in f4:
-    if (line[9:11] == framerate) and (int(line[0:8]) >= int(startDay)):
-      f3.write("file " + line)
-  f4.close()
-  f3.close()
-  os.system("ffmpeg -f concat -i " + workingFolder + "/videolist.txt -codec copy output_" + framerate + ".mp4")
+print "merge videos"
+os.system("ls " + workingFolder + " | grep mp4 > videolist0.txt")
+f3 = open(workingFolder + '/videolist.txt','w')  
+f4 = open('videolist0.txt','r') 
+for line in f4:
+  if (line[9:11] == framerate) and (int(line[0:8]) >= int(startDay)):
+    f3.write("file " + line)
+f4.close()
+f3.close()
+os.system("ffmpeg -f concat -i " + workingFolder + "/videolist.txt -codec copy output_" + framerate + "fps.mp4")
 
 
 #== Clean =============================================
