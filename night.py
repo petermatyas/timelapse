@@ -6,7 +6,7 @@ from datetime import timedelta
 import pytz   # pip install pytz
 from astral import Astral, GoogleGeocoder   # pip install astral
 
-path = "/media/peti/DC51-49A01/camera"
+path = "/media/peti/KA/camera"
 
 
 def night(t):
