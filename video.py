@@ -6,8 +6,8 @@ import getpass
 
 #=== Config ==============================================================================================
 framerate     = "15"
-startDay      = "20160128"
-stopDay       = "20160128"
+startDay      = "20160201"
+stopDay       = "20190128"
 textSize      = "100"			# 
 resolution    = "1080x720"		# 1080x720|
 originalRes   = "2592x1944"
@@ -107,7 +107,7 @@ for line in f4:
       f5.write("file " + line)
 f3.close()
 f4.close()
-f4.close()
+f5.close()
 os.system("ffmpeg -f concat -i " + workingFolder + "/videolist.txt -codec copy output_" + framerate + "fps" + resolution + ".mp4")
 if (toSzabi == "yes"):
   os.system("ffmpeg -f concat -i " + workingFolder + "/videolistoriginal.txt -codec copy output_" + framerate + "fps" + originalRes + "_toSzabi.mp4")
