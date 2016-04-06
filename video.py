@@ -19,7 +19,8 @@ workingFolder = "/home/peti/timelapseWork"
 #=== Config end ==========================================================================================
 
 
-
+#=== Separate night pictures =========================
+os.system("python ./night.py")
 
 #=== Create lists =====================================
 os.system("ls " + pathToPictures + " > " + workingFolder + "/list_.txt")	# create file list
