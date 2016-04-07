@@ -12,6 +12,8 @@ textSize      = "100"			#
 resolution    = "1080x720"		# 1080x720|
 originalRes   = "2592x1944"
 toSzabi       = "no"			# yes|no
+night	      = "no"			# yes|no
+
 
 pathToPictures = "/media/" + getpass.getuser() + "/KA/camera"	# external hard drive contain the pictures
 #workingFolder = os.getcwd()
@@ -20,7 +22,8 @@ workingFolder = "/home/peti/timelapseWork"
 
 
 #=== Separate night pictures =========================
-os.system("python ./night.py")
+if (night == "yes"):
+  os.system("python ./night.py")
 
 #=== Create lists =====================================
 os.system("ls " + pathToPictures + " > " + workingFolder + "/list_.txt")	# create file list
