@@ -5,13 +5,15 @@ import time
 import getpass
 
 #=== Config ==============================================================================================
-framerate     = "15"
+framerate     = "24"
 startDay      = "20160201"
 stopDay       = "20190128"
 textSize      = "100"			# 
 resolution    = "1080x720"		# 1080x720|
 originalRes   = "2592x1944"
-toSzabi       = "yes"			# yes|no
+toSzabi       = "no"			# yes|no
+night	      = "no"			# yes|no
+
 
 pathToPictures = "/media/" + getpass.getuser() + "/KA/camera"	# external hard drive contain the pictures
 #workingFolder = os.getcwd()
@@ -20,7 +22,8 @@ workingFolder = "/home/peti/timelapseWork"
 
 
 #=== Separate night pictures =========================
-os.system("python ./night.py")
+if (night == "yes"):
+  os.system("python ./night.py")
 
 #=== Create lists =====================================
 os.system("ls " + pathToPictures + " > " + workingFolder + "/list_.txt")	# create file list
@@ -34,7 +37,7 @@ for line in f3:
   line = line.rstrip('\n')
   if line[0]=="2":
     f.write(line + "\n")
-    if ((lineArchive != line[0:8]) and (int(line[0:8]) >= int(startDay)) and (int(line[0:8]) <= int(stopDay)) and not(os.path.isfile(workingFolder + "/" + line[0:8] + "_" + framerate + "fps.mp4"))):
+    if ((lineArchive != line[0:8]) and (int(line[0:8]) >= int(startDay)) and (int(line[0:8]) <= int(stopDay)) and not(os.path.isfile(workingFolder + "/" + line[0:8] + "_" + framerate + "fps_" + resolution + ".mp4"))):
       f2.write(line[0:8] + "\n") 
       lineArchive = line[0:8]   
 
@@ -59,7 +62,7 @@ for line2 in f2:
     year = line[0:4]
     month = line[4:6]
     day = line[6:8]       
-    text = year + "/" + month + "/" + day 
+    text = year + "." + month + "." + day 
     if ((year == year2) and (month == month2) and (day == day2)):
     # copy to working folder
       os.system("cp " + pathToPictures + "/" + line + " " + workingFolder)      
